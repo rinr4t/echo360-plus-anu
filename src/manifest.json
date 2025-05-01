@@ -11,10 +11,10 @@
     "content_scripts": [
         {
             "matches": [
-                "https://echo360.org/section/*",
-                "http://echo360.org/section/*",
-                "https://echo360.org.au/section/*",
-                "http://echo360.org.au/section/*"
+                "https://echo360.net/section/*",
+                "http://echo360.net/section/*",
+                "https://echo360.net.au/section/*",
+                "http://echo360.net.au/section/*"
             ],
             "js": [
                 "js/custom-file-names.js"
@@ -24,10 +24,10 @@
         },
         {
             "matches": [
-                "https://echo360.org/lesson/*",
-                "http://echo360.org/lesson/*",
-                "https://echo360.org.au/lesson/*",
-                "http://echo360.org.au/lesson/*"
+                "https://echo360.net/lesson/*",
+                "http://echo360.net/lesson/*",
+                "https://echo360.net.au/lesson/*",
+                "http://echo360.net.au/lesson/*"
             ],
             "js": [
                 "js/more-speed-options.js"
@@ -37,10 +37,10 @@
         },
         {
             "matches": [
-                "https://echo360.org/section/*",
-                "http://echo360.org/section/*",
-                "https://echo360.org.au/section/*",
-                "http://echo360.org.au/section/*"
+                "https://echo360.net/section/*",
+                "http://echo360.net/section/*",
+                "https://echo360.net.au/section/*",
+                "http://echo360.net.au/section/*"
             ],
             "js": [
                 "js/day-with-dates.js"
@@ -50,10 +50,10 @@
         },
         {
             "matches": [
-                "https://echo360.org/section/*",
-                "http://echo360.org/section/*",
-                "https://echo360.org.au/section/*",
-                "http://echo360.org.au/section/*"
+                "https://echo360.net/section/*",
+                "http://echo360.net/section/*",
+                "https://echo360.net.au/section/*",
+                "http://echo360.net.au/section/*"
             ],
             "css": [
                 "css/reposition-popup.css"
@@ -62,10 +62,10 @@
         },
         {
             "matches": [
-                "https://echo360.org/section/*",
-                "http://echo360.org/section/*",
-                "https://echo360.org.au/section/*",
-                "http://echo360.org.au/section/*"
+                "https://echo360.net/section/*",
+                "http://echo360.net/section/*",
+                "https://echo360.net.au/section/*",
+                "http://echo360.net.au/section/*"
             ],
             "js": [
                 "js/hide-future-lectures.js"

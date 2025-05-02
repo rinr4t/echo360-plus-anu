@@ -20,7 +20,7 @@
           if (dateElement) {
               const lectureDate = parseLectureDate(dateElement.textContent.trim());
               if (lectureDate && lectureDate > now) {
-                  lecture.style.display = 'none';
+              lecture.style.display = 'none';
               }
           }
       });

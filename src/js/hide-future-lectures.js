@@ -1,66 +1,99 @@
 (() => {
-  console.log('Echo360+ - hide future lectures');
+  console.log('Echo360+ - Hide Future Lectures');
 
-  // Wait until the dropdown and options are available
-  const waitForSortElements = setInterval(() => {
-    const dropdown = document.getElementsByClassName("selection-value")[0];
-    const options = document.getElementsByClassName("active-result");
+  // Add UI controls
+  const addControls = () => {
+      const controlsContainer = document.querySelector('.page-controls, .toolbar');
+      if (!controlsContainer || document.getElementById('hideFutureContainer')) return;
 
-    if (dropdown && options.length > 1) {
-      clearInterval(waitForSortElements);
-      dropdown.click();
-      options[1].click(); // Assumes "Newest" is at index 1
-    }
-  }, 500); // Check every 500ms
+      const container = document.createElement('div');
+      container.id = 'hideFutureContainer';
+      container.className = 'hide-future';
+      container.innerHTML = `
+          <label>
+              <input type="checkbox" id="hideFutureToggle">
+              Hide future lectures
+          </label>
+      `;
+      controlsContainer.appendChild(container);
 
-  // Reference to info the info bar, which also displays the sort-by dropdown.
-  const infoBar = document.getElementsByClassName('info-bar')[0];
-
-  // Create a new checkbox element
-  let toggleFutureLectures = document.createElement('input');
-  toggleFutureLectures.type = 'checkbox';
-
-  // This value can safely be altered to control the default visibility of future lectures
-  toggleFutureLectures.checked = true;
-  toggleFutureLectures.id = 'showFutureLectures';
-
-  // Store all the lectures that we hide, so we can bring them back.
-  let futureLectures = [];
-
-  toggleFutureLectures.onchange = () => {
-    for (const lecture of futureLectures) {
-      lecture.style.display = toggleFutureLectures.checked ? 'none' : '';
-    }
+      // Add event listener
+      document.getElementById('hideFutureToggle').addEventListener('change', toggleFutureLectures);
   };
 
-  // Create a container element on the info bar to hold a toggle box for this feature
-  const hideFutureDiv = document.createElement('div');
-  infoBar.appendChild(hideFutureDiv);
-  hideFutureDiv.className = 'hide-future';
-
-  // Place a label in this container
-  const label = document.createElement('label');
-  label.textContent = "Hide future lectures";
-  hideFutureDiv.appendChild(label);
-
-  // Place the checkbox element in this container
-  hideFutureDiv.appendChild(toggleFutureLectures);
-
-  // The div which holds all the lectures
-  const lectureContainer = document.getElementsByClassName('contents-wrapper')[0];
-
-  // Hide any lectures which are already in the document before script loads
-  futureLectures = Array.from(document.getElementsByClassName('class-row future'));
-  toggleFutureLectures.onchange();
-
-  // As lectures are loaded asynchronously after page loads, we need a listener
-  lectureContainer.addEventListener('DOMNodeInserted', (evt) => {
-    const target = evt.target;
-    if (target.classList && target.classList.contains('class-row') && target.classList.contains('future')) {
-      if (document.getElementById('showFutureLectures').checked) {
-        target.style.display = 'none';
+  // Toggle future lectures visibility
+  const toggleFutureLectures = (e) => {
+      if (e.target.checked) {
+          hideFutureLectures();
+      } else {
+          showAllLectures();
       }
-      futureLectures.push(target);
-    }
-  });
+  };
+
+  // Hide future lectures
+  const hideFutureLectures = () => {
+      const lectures = document.querySelectorAll('.lecture-item, .PagedList-item');
+      const now = new Date();
+      
+      lectures.forEach(lecture => {
+          const dateElement = lecture.querySelector('.date, .lecture-date');
+          if (!dateElement) return;
+          
+          try {
+              const dateText = dateElement.textContent.trim();
+              const lectureDate = new Date(dateText);
+              
+              if (lectureDate > now) {
+                  lecture.classList.add('future-lecture-hidden');
+              }
+          } catch (e) {
+              console.error('Error parsing date:', e);
+          }
+      });
+  };
+
+  // Show all lectures
+  const showAllLectures = () => {
+      const lectures = document.querySelectorAll('.lecture-item, .PagedList-item');
+      lectures.forEach(lecture => {
+          lecture.classList.remove('future-lecture-hidden');
+      });
+  };
+
+  // Initialize
+  const init = () => {
+      // Wait for page to fully load
+      const checkReady = setInterval(() => {
+          if (document.querySelector('.selection-value')) {
+              clearInterval(checkReady);
+              addControls();
+              
+              // Set default sort to Newest
+              setTimeout(sortByNewest, 500);
+          }
+      }, 200);
+  };
+
+  // Sort by newest (original functionality)
+  const sortByNewest = () => {
+      const label = document.querySelector('.selection-value');
+      if (!label) return;
+
+      label.click();
+
+      setTimeout(() => {
+          const options = document.querySelectorAll('.active-result');
+          const newestOption = Array.from(options).find(el => 
+              el.textContent.trim().toLowerCase().includes('newest')
+          );
+          
+          if (newestOption) {
+              newestOption.click();
+              console.log('Sorted by newest');
+          }
+      }, 200);
+  };
+
+  // Start the extension
+  init();
 })();
